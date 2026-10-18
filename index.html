@@ -14,7 +14,7 @@ label{display:block;font-size:12px;font-weight:750;color:#40586a;margin:12px 0 6
 .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 12px 28px rgba(23,58,83,.08)}
 .auth-shell{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(145deg,#0b2941,#0b6597)}.auth-card{width:min(540px,100%);background:#fff;border-radius:22px;padding:28px;box-shadow:0 30px 75px rgba(0,0,0,.28)}.auth-card h1{margin:2px 0 8px;font-size:30px}
 .phone-row{display:grid;grid-template-columns:125px 1fr;gap:10px}.status{margin-top:14px;padding:10px 12px;border-radius:10px;background:#f5f8fa;font-size:12px;color:#526b7e}.status.error{background:#fff2f2;color:#8c3131}.auth-links{display:flex;justify-content:space-between;gap:10px;margin-top:10px}.linkbtn{border:0;background:none;color:var(--blue);padding:4px 0;cursor:pointer;font-weight:700}
-.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.role-option{border:1px solid #cad8e2;border-radius:14px;padding:14px;cursor:pointer}.role-option.selected{border:2px solid var(--blue);background:#f4fbff}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.role-option{border:1px solid #cad8e2;border-radius:14px;padding:14px;cursor:pointer}.role-option.selected{border:2px solid var(--blue);background:#f4fbff}
 header{background:linear-gradient(135deg,#0c2f4c,#0b6698);color:#fff;padding:18px 24px;position:sticky;top:0;z-index:5}.head{display:flex;justify-content:space-between;align-items:center;gap:18px}.head h1{margin:2px 0 0;font-size:25px}.top-actions{display:flex;gap:8px;align-items:center}.user-badge{font-size:12px;padding:7px 10px;border:1px solid rgba(255,255,255,.28);border-radius:999px}
 main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:18px}.dashboard-head h2{margin:0 0 5px;font-size:30px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid.two{grid-template-columns:1fr 1fr}.metric{font-size:30px;font-weight:850;margin-top:8px}
 .student-list,.timeline{display:grid;gap:10px;margin-top:12px}.student-card{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer}.student-card:hover{background:#f7fbfd}.student-name{font-weight:850}.timeline-item{border-left:3px solid #9bc6dc;padding:10px 12px;background:#fff;border-radius:0 12px 12px 0}.empty{padding:20px;text-align:center;border:1px dashed #b9ccd8;border-radius:14px;color:var(--muted)}
@@ -72,10 +72,11 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
       <h3>Finish your profile</h3>
       <label>Full name</label><input id="fullName" placeholder="Full name">
       <label>Recovery email</label><input id="profileEmail" type="email" placeholder="name@example.com">
-      <label>I am a</label>
+      <label>Account type</label>
       <div class="role-grid">
-        <div class="role-option" data-role="student"><strong>Student</strong><div class="small muted">One account for all programs, comments and coaches.</div></div>
+        <div class="role-option" data-role="student"><strong>Student / Skater</strong><div class="small muted">One account for all programs, comments and coaches.</div></div>
         <div class="role-option" data-role="coach"><strong>Coach</strong><div class="small muted">Select among assigned students after sign-in.</div></div>
+        <div class="role-option" data-role="parent"><strong>Parent / Guardian</strong><div class="small muted">View linked skaters, programs and coach feedback.</div></div>
       </div>
       <button class="btn" id="finishOnboarding" disabled style="width:100%;margin-top:14px">Create profile</button>
     </div>
@@ -84,7 +85,7 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
 </section>
 
 <div id="appShell" class="hidden">
-<header><div class="wrap head"><div><div class="small" style="opacity:.75;text-transform:uppercase;letter-spacing:.12em">Coach & student workspace</div><h1>Skate Program Studio</h1></div><div class="top-actions"><span class="user-badge" id="userBadge"></span><button class="btn secondary" id="logoutBtn">Sign out</button></div></div></header>
+<header><div class="wrap head"><div><div class="small" style="opacity:.75;text-transform:uppercase;letter-spacing:.12em">Coach, student & family workspace</div><h1>Skate Program Studio</h1></div><div class="top-actions"><span class="user-badge" id="userBadge"></span><button class="btn secondary" id="logoutBtn">Sign out</button></div></div></header>
 <main><div class="wrap">
 <section id="coachDashboard" class="hidden">
   <div class="dashboard-head"><div><div class="eyebrow">Coach dashboard</div><h2>Select a student</h2><p class="muted">Choose the student you want to work on.</p></div></div>
@@ -95,6 +96,17 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
   <div class="dashboard-head"><div><div class="eyebrow">Student dashboard</div><h2 id="studentHeading">Your skating workspace</h2><p class="muted">Programs, coach comments and practice records stay together in one account.</p></div><button class="btn" id="openStudioBtn">Open Program Studio</button></div>
   <div class="grid"><div class="card"><div class="small muted">Programs</div><div class="metric" id="programCount">0</div></div><div class="card"><div class="small muted">Coach feedback</div><div class="metric" id="feedbackCount">0</div></div><div class="card"><div class="small muted">Practice sessions</div><div class="metric" id="practiceCount">0</div></div></div>
   <div style="margin-top:24px"><h3>Coach feedback & comments</h3><div id="feedbackTimeline" class="timeline"></div></div>
+</section>
+
+<section id="parentDashboard" class="hidden">
+  <div class="dashboard-head"><div><div class="eyebrow">Parent / guardian dashboard</div><h2>Select a skater</h2><p class="muted">Choose the linked skater whose programs, feedback and practice history you want to view.</p></div></div>
+  <div class="card"><div id="parentStudentList" class="student-list"></div></div>
+</section>
+
+<section id="parentStudentWorkspace" class="hidden">
+  <div class="dashboard-head"><div><div class="eyebrow">Family view</div><h2 id="parentStudentHeading"></h2><p class="muted">Read-only view of programs, coach feedback and practice records.</p></div><button class="btn secondary" id="changeParentStudentBtn">Change skater</button></div>
+  <div class="grid"><div class="card"><div class="small muted">Programs</div><div class="metric" id="parentProgramCount">0</div></div><div class="card"><div class="small muted">Coach feedback</div><div class="metric" id="parentFeedbackCount">0</div></div><div class="card"><div class="small muted">Practice sessions</div><div class="metric" id="parentPracticeCount">0</div></div></div>
+  <div style="margin-top:24px"><h3>Coach feedback & comments</h3><div id="parentFeedbackTimeline" class="timeline"></div></div>
 </section>
 
 <section id="coachStudentWorkspace" class="hidden">
@@ -115,168 +127,5 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
 </div></main></div>
 <div id="toast" class="toast"></div>
 
-<script>
-const SUPABASE_URL='https://myjkjaracfsomtpwmizy.supabase.co';
-const SUPABASE_KEY='sb_publishable_QA1HPPYsRpNgpulT3SFSPw_FJWlLZbn';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-let selectedRole=null, currentProfile=null, currentStudent=null, currentCoach=null, selectedStudent=null, musicFile=null;
-
-function status(msg,error=false){const e=$('#authStatus');e.textContent=msg;e.classList.toggle('error',error)}
-function toast(msg){const e=$('#toast');e.textContent=msg;e.style.display='block';setTimeout(()=>e.style.display='none',2300)}
-function phone(ccSel, numberSel){const cc=$(ccSel).value;const digits=$(numberSel).value.replace(/\D/g,'');return cc+digits}
-function showAuth(which){
-  ['#loginStep','#signupStep','#resetStep','#newPasswordStep','#onboardingStep'].forEach(x=>$(x).classList.add('hidden'));
-  $(which).classList.remove('hidden');
-}
-function validPassword(p){return p.length>=8}
-
-$('#showSignup').onclick=()=>{showAuth('#signupStep');$('#authTitle').textContent='Create account';status('Create your beta account with phone, password and recovery email.')};
-$('#showReset').onclick=()=>{showAuth('#resetStep');$('#authTitle').textContent='Reset password';status('Use the recovery email connected to your account.')};
-$('#backToLogin1').onclick=$('#backToLogin2').onclick=()=>{showAuth('#loginStep');$('#authTitle').textContent='Sign in';status('Phone + password beta login is ready.')};
-
-$('#signInBtn').onclick=async()=>{
-  const p=phone('#countryCode','#phoneNumber'), password=$('#password').value;
-  if(p.length<10||!password){status('Enter your mobile number and password.',true);return}
-  status('Signing in...');
-  const {error}=await sb.auth.signInWithPassword({phone:p,password});
-  if(error){status(error.message,true);return}
-  await routeSession();
-};
-
-$('#createAccountBtn').onclick=async()=>{
-  const p=phone('#signupCountryCode','#signupPhone'), password=$('#signupPassword').value, email=$('#signupEmail').value.trim().toLowerCase();
-  if(p.length<10||!validPassword(password)||!email.includes('@')){status('Enter a valid phone number, password of at least 8 characters, and recovery email.',true);return}
-  status('Creating account...');
-  const {data,error}=await sb.auth.signUp({phone:p,password,options:{data:{recovery_email:email}}});
-  if(error){status(error.message,true);return}
-  if(!data.session){status('Account created, but Supabase is requiring phone confirmation. Disable phone confirmation for the beta project, then sign in.',true);return}
-  const {error:emailError}=await sb.auth.updateUser({email});
-  if(emailError){status('Account created. Recovery email could not be attached yet: '+emailError.message,true)}
-  $('#profileEmail').value=email;
-  await routeSession();
-};
-
-$('#sendResetBtn').onclick=async()=>{
-  const email=$('#resetEmail').value.trim().toLowerCase();
-  if(!email.includes('@')){status('Enter a valid recovery email.',true);return}
-  status('Sending reset email...');
-  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
-  if(error){status(error.message,true);return}
-  status('Password reset email sent. Open the link in that email.');
-};
-
-$('#saveNewPasswordBtn').onclick=async()=>{
-  const password=$('#newPassword').value;
-  if(!validPassword(password)){status('Password must be at least 8 characters.',true);return}
-  const {error}=await sb.auth.updateUser({password});
-  if(error){status(error.message,true);return}
-  status('Password updated. Loading your account...');
-  await routeSession();
-};
-
-$$('.role-option').forEach(el=>el.onclick=()=>{selectedRole=el.dataset.role;$$('.role-option').forEach(x=>x.classList.toggle('selected',x===el));$('#finishOnboarding').disabled=false});
-$('#finishOnboarding').onclick=async()=>{
-  const name=$('#fullName').value.trim(), email=$('#profileEmail').value.trim().toLowerCase();
-  if(!name||!selectedRole||!email.includes('@')){status('Enter your name, recovery email and choose Student or Coach.',true);return}
-  const {data:{user}}=await sb.auth.getUser();
-  if(user && (!user.email || user.email.toLowerCase()!==email)){const {error}=await sb.auth.updateUser({email});if(error){status('Profile cannot be completed until the recovery email is attached: '+error.message,true);return}}
-  const {error}=await sb.rpc('complete_onboarding_with_recovery',{p_role:selectedRole,p_full_name:name,p_email:email});
-  if(error){status(error.message,true);return}
-  await loadProfile();
-};
-
-async function routeSession(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(!session){return}
-  if(location.hash.includes('type=recovery')){showAuth('#newPasswordStep');$('#authTitle').textContent='Choose new password';return}
-  await loadProfile();
-}
-async function loadProfile(){
-  const {data:{user}}=await sb.auth.getUser();
-  if(!user)return;
-  const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
-  if(error){status(error.message,true);return}
-  if(!data){
-    $('#authShell').classList.remove('hidden');$('#appShell').classList.add('hidden');
-    showAuth('#onboardingStep');$('#authTitle').textContent='Finish your profile';$('#profileEmail').value=user.email||user.user_metadata?.recovery_email||'';status('Choose whether this account belongs to a student or coach.');
-    return;
-  }
-  currentProfile=data;$('#authShell').classList.add('hidden');$('#appShell').classList.remove('hidden');$('#userBadge').textContent=data.full_name+' · '+data.role;
-  await routeRole();
-}
-async function routeRole(){
-  $('#coachDashboard').classList.add('hidden');$('#studentDashboard').classList.add('hidden');$('#coachStudentWorkspace').classList.add('hidden');$('#studio').classList.add('hidden');
-  if(currentProfile.role==='student'){
-    const {data}=await sb.from('students').select('*').eq('profile_id',currentProfile.id).single(); currentStudent=data; selectedStudent=data;
-    $('#studentDashboard').classList.remove('hidden');$('#studentHeading').textContent=(data?.display_name||currentProfile.full_name)+' — skating workspace'; await loadStudentSummary(data.id);
-  } else if(currentProfile.role==='coach'){
-    const {data:c}=await sb.from('coaches').select('*').eq('profile_id',currentProfile.id).single();currentCoach=c;$('#coachDashboard').classList.remove('hidden');await loadCoachStudents();
-  }
-}
-async function loadCoachStudents(){
-  const {data,error}=await sb.from('coach_students').select('student_id,status,relationship_label,students(id,display_name,skating_level)').eq('coach_id',currentCoach.id).eq('status','active');
-  const box=$('#studentList');
-  if(error){box.innerHTML='<div class="empty">'+error.message+'</div>';return}
-  if(!data?.length){box.innerHTML='<div class="empty">No students are assigned yet. An administrator can link students to this coach in Supabase.</div>';return}
-  box.innerHTML=data.map(r=>`<div class="student-card" data-id="${r.students.id}"><div><div class="student-name">${r.students.display_name}</div><div class="small muted">${r.students.skating_level||'Level not set'}${r.relationship_label?' · '+r.relationship_label:''}</div></div><button class="btn">Open</button></div>`).join('');
-  $$('.student-card').forEach(el=>el.onclick=()=>openCoachStudent(el.dataset.id,data.find(r=>r.students.id===el.dataset.id).students.display_name));
-}
-async function openCoachStudent(id,name){
-  selectedStudent={id,display_name:name};$('#coachDashboard').classList.add('hidden');$('#coachStudentWorkspace').classList.remove('hidden');$('#coachStudentHeading').textContent=name;$('#studio').classList.remove('hidden');$('#studioStudentName').textContent=name;await loadCoachFeedback(id);
-}
-$('#changeStudentBtn').onclick=()=>{selectedStudent=null;$('#coachStudentWorkspace').classList.add('hidden');$('#studio').classList.add('hidden');$('#coachDashboard').classList.remove('hidden')};
-$('#openStudioBtn').onclick=()=>{$('#studio').classList.remove('hidden');$('#studioStudentName').textContent=selectedStudent.display_name;$('#studio').scrollIntoView({behavior:'smooth'})};
-
-async function loadStudentSummary(studentId){
-  const [{count:p},{count:f},{count:s},{data:feedback}]=await Promise.all([
-    sb.from('programs').select('*',{count:'exact',head:true}).eq('student_id',studentId),
-    sb.from('coach_feedback').select('*',{count:'exact',head:true}).eq('student_id',studentId),
-    sb.from('practice_sessions').select('*',{count:'exact',head:true}).eq('student_id',studentId),
-    sb.from('coach_feedback').select('body,feedback_type,created_at,coaches(display_name)').eq('student_id',studentId).order('created_at',{ascending:false}).limit(20)
-  ]);
-  $('#programCount').textContent=p||0;$('#feedbackCount').textContent=f||0;$('#practiceCount').textContent=s||0;
-  renderFeedback('#feedbackTimeline',feedback);
-}
-async function loadCoachFeedback(studentId){const {data}=await sb.from('coach_feedback').select('body,feedback_type,created_at').eq('student_id',studentId).order('created_at',{ascending:false}).limit(20);renderFeedback('#coachFeedbackTimeline',data)}
-function renderFeedback(sel,data){const box=$(sel);if(!data?.length){box.innerHTML='<div class="empty">No feedback yet.</div>';return}box.innerHTML=data.map(x=>`<div class="timeline-item"><strong>${x.coaches?.display_name||x.feedback_type||'Coach feedback'}</strong><div>${x.body||''}</div><div class="small muted" style="margin-top:4px">${new Date(x.created_at).toLocaleString()}</div></div>`).join('')}
-$('#saveFeedbackBtn').onclick=async()=>{const body=$('#coachFeedbackText').value.trim();if(!body||!selectedStudent||!currentCoach)return;const {error}=await sb.from('coach_feedback').insert({student_id:selectedStudent.id,coach_id:currentCoach.id,feedback_type:'general',body});if(error){toast(error.message);return}$('#coachFeedbackText').value='';toast('Feedback saved.');await loadCoachFeedback(selectedStudent.id)};
-
-$('#logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
-
-$('#chooseMusic').onclick=()=>$('#musicFile').click();
-$('#musicFile').onchange=async e=>{
-  const f=e.target.files[0]; if(!f||!selectedStudent)return; musicFile=f;$('#musicName').textContent=f.name;try{$('#music').src=URL.createObjectURL(f);$('#music').style.display='block'}catch(_){}
-  const path=`${selectedStudent.id}/music/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
-  const {error}=await sb.storage.from('student-files').upload(path,f,{upsert:false}); if(error){toast('File selected; storage upload failed: '+error.message);return}
-  await sb.from('student_files').insert({student_id:selectedStudent.id,uploaded_by:currentProfile.id,file_type:'music',file_name:f.name,storage_path:path});
-  toast('Music uploaded securely.');
-  gate();
-};
-$('#direction').oninput=gate;
-function gate(){ $('#generate').disabled=!(musicFile&&$('#direction').value.trim()) }
-$('#generate').onclick=()=>{$('#designs').classList.remove('hidden');$('#designs').scrollIntoView({behavior:'smooth'})};
-
-const programData={Entry:{title:'Reliable & clear',description:'Generous preparation, cleaner transitions and lower execution risk while satisfying the selected STAR requirements.',cls:'entry'},Intermediate:{title:'Competitive balance',description:'Stronger transitions and musical alignment with balanced technical and choreographic demand.',cls:'mid'},Advanced:{title:'Maximum potential',description:'More complex entries, exits, timing and rink utilization while remaining within the selected STAR requirements.',cls:'adv'}};
-$('#programSelect').onchange=e=>{const v=e.target.value;$('#previewChoice').disabled=!v;const box=$('#programDetail');if(!v){box.classList.remove('show');return}const d=programData[v];$('#programTag').textContent=v;$('#programTag').className='tag '+d.cls;$('#programTitle').textContent=d.title;$('#programDescription').textContent=d.description;box.classList.add('show')};
-function preview(){const v=$('#programSelect').value;if(v)toast(v+' program preview ready for coach review.')}
-$('#previewChoice').onclick=preview;$('#previewDetail').onclick=preview;
-$('#selectProgram').onclick=async()=>{
-  const v=$('#programSelect').value;if(!v||!selectedStudent)return;
-  const {data:p,error}=await sb.from('programs').insert({student_id:selectedStudent.id,title:`${v} Program`,star_level:$('#star').value,status:'draft',created_by:currentProfile.id}).select().single();
-  if(error){toast(error.message);return}
-  await sb.from('program_versions').insert({program_id:p.id,version_type:v.toLowerCase(),content:{direction:$('#direction').value},created_by:currentProfile.id});
-  toast(v+' program saved.'); if(currentProfile.role==='coach'){openEditor(v)} else {await loadStudentSummary(selectedStudent.id)}
-};
-
-const elements=[{name:'Opening / Start',time:'0:00',entry:'Opening pose',exit:'Build into first phrase',x:8,y:80},{name:'Jump 1',time:'0:28',entry:'Controlled setup',exit:'Flowing landing edge',x:26,y:62},{name:'Spin',time:'0:51',entry:'Musical transition',exit:'Open into travel',x:46,y:45},{name:'Step Sequence',time:'1:13',entry:'Edge build',exit:'Accelerate',x:66,y:60},{name:'Jump 2',time:'1:38',entry:'Compact preparation',exit:'Checked landing',x:82,y:40},{name:'Final Pose',time:'2:05',entry:'Musical finish',exit:'Hold',x:92,y:18}];let active=0;
-function openEditor(v){$('#workspace').style.display='grid';$('#rinkTitle').textContent=v+' Program · Coach Review';draw();$('#workspace').scrollIntoView({behavior:'smooth'})}
-function draw(){const rink=$('#rink');rink.querySelectorAll('.el').forEach(n=>n.remove());elements.forEach((e,i)=>{const n=document.createElement('button');n.className='el';n.style.left=e.x+'%';n.style.top=e.y+'%';n.textContent=i+1;n.onclick=()=>pick(i);rink.appendChild(n)});$('#list').innerHTML=elements.map((e,i)=>`<div class="item ${i===active?'active':''}" data-i="${i}"><strong>${e.name}</strong><div class="small muted">${e.time} · ${e.entry}</div></div>`).join('');$$('.item').forEach(n=>n.onclick=()=>pick(+n.dataset.i));pick(active)}
-function pick(i){active=i;const e=elements[i];$('#elName').value=e.name;$('#elTime').value=e.time;$('#entry').value=e.entry;$('#exit').value=e.exit;$$('.item').forEach((n,j)=>n.classList.toggle('active',j===i))}
-$('#apply').onclick=()=>{const e=elements[active];e.name=$('#elName').value;e.time=$('#elTime').value;e.entry=$('#entry').value;e.exit=$('#exit').value;draw();toast('Element updated.')};
-$('#finalize').onclick=()=>toast('Program finalized for requirements check and binder workflow.');
-
-sb.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){showAuth('#newPasswordStep');$('#authTitle').textContent='Choose new password'}else if(event==='SIGNED_IN'&&session){setTimeout(routeSession,0)}});
-routeSession();
-</script>
+<script src="app.js"></script>
 </body></html>
