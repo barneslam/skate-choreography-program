@@ -7,6 +7,7 @@
     return cc + digits;
   };
   const setStatus = (msg, error=false) => status(msg,error);
+  const appRedirect = location.origin + location.pathname;
 
   document.querySelector('#authIntro').textContent='Use your email address and password. Your mobile number is stored in your profile; no text message is required during beta testing.';
 
@@ -48,7 +49,10 @@
     setStatus('Creating account...');
     const {data,error}=await sb.auth.signUp({
       email,password,
-      options:{data:{mobile_phone:mobile}}
+      options:{
+        emailRedirectTo: appRedirect,
+        data:{mobile_phone:mobile}
+      }
     });
     if(error){setStatus(error.message,true);return;}
     document.querySelector('#profileEmail').value=email;
