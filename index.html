@@ -29,28 +29,26 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
   <div class="auth-card">
     <div class="eyebrow">Skate Program Studio · Beta</div>
     <h1 id="authTitle">Sign in</h1>
-    <p class="muted" id="authIntro">Use your mobile number and password. No text message is required during beta testing.</p>
+    <p class="muted" id="authIntro">Use your email address and password. Your mobile number is kept in your profile for coach, student and family records.</p>
 
     <div id="loginStep">
-      <label>Mobile number</label>
-      <div class="phone-row">
-        <select id="countryCode"><option value="+1">Canada / US +1</option><option value="+44">UK +44</option><option value="+61">Australia +61</option></select>
-        <input id="phoneNumber" inputmode="tel" autocomplete="tel" placeholder="416 555 1234">
-      </div>
+      <label>Email address</label>
+      <select id="countryCode" class="hidden"><option value="+1">Canada / US +1</option></select>
+      <input id="phoneNumber" type="email" autocomplete="email" placeholder="name@example.com">
       <label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Password">
       <button class="btn" id="signInBtn" style="width:100%;margin-top:14px">Sign in</button>
       <div class="auth-links"><button class="linkbtn" id="showSignup">Create account</button><button class="linkbtn" id="showReset">Forgot password?</button></div>
     </div>
 
     <div id="signupStep" class="hidden">
+      <label>Email address</label><input id="signupEmail" type="email" autocomplete="email" placeholder="name@example.com">
+      <label>Password</label><input id="signupPassword" type="password" autocomplete="new-password" placeholder="Minimum 8 characters">
       <label>Mobile number</label>
       <div class="phone-row">
         <select id="signupCountryCode"><option value="+1">Canada / US +1</option><option value="+44">UK +44</option><option value="+61">Australia +61</option></select>
         <input id="signupPhone" inputmode="tel" autocomplete="tel" placeholder="416 555 1234">
       </div>
-      <label>Password</label><input id="signupPassword" type="password" autocomplete="new-password" placeholder="Minimum 8 characters">
-      <label>Recovery email</label><input id="signupEmail" type="email" autocomplete="email" placeholder="name@example.com">
-      <div class="small muted" style="margin-top:7px">Your recovery email is used for password reset and should be accessible to you.</div>
+      <div class="small muted" style="margin-top:7px">Email is used for sign-in and password recovery. No SMS is required during beta testing.</div>
       <button class="btn" id="createAccountBtn" style="width:100%;margin-top:14px">Create account</button>
       <button class="linkbtn" id="backToLogin1" style="margin-top:8px">Back to sign in</button>
     </div>
@@ -71,7 +69,8 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
     <div id="onboardingStep" class="hidden">
       <h3>Finish your profile</h3>
       <label>Full name</label><input id="fullName" placeholder="Full name">
-      <label>Recovery email</label><input id="profileEmail" type="email" placeholder="name@example.com">
+      <label>Email address</label><input id="profileEmail" type="email" placeholder="name@example.com" readonly>
+      <label>Mobile number</label><input id="profilePhone" inputmode="tel" autocomplete="tel" placeholder="416 555 1234">
       <label>Account type</label>
       <div class="role-grid">
         <div class="role-option" data-role="student"><strong>Student / Skater</strong><div class="small muted">One account for all programs, comments and coaches.</div></div>
@@ -80,7 +79,7 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
       </div>
       <button class="btn" id="finishOnboarding" disabled style="width:100%;margin-top:14px">Create profile</button>
     </div>
-    <div id="authStatus" class="status">Phone + password beta login is ready.</div>
+    <div id="authStatus" class="status">Email + password beta login is ready.</div>
   </div>
 </section>
 
@@ -97,6 +96,7 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
   <div class="grid"><div class="card"><div class="small muted">Programs</div><div class="metric" id="programCount">0</div></div><div class="card"><div class="small muted">Coach feedback</div><div class="metric" id="feedbackCount">0</div></div><div class="card"><div class="small muted">Practice sessions</div><div class="metric" id="practiceCount">0</div></div></div>
   <div style="margin-top:24px"><h3>Coach feedback & comments</h3><div id="feedbackTimeline" class="timeline"></div></div>
 </section>
+
 
 <section id="parentDashboard" class="hidden">
   <div class="dashboard-head"><div><div class="eyebrow">Parent / guardian dashboard</div><h2>Select a skater</h2><p class="muted">Choose the linked skater whose programs, feedback and practice history you want to view.</p></div></div>
@@ -128,4 +128,5 @@ main{padding:24px 22px 60px}.dashboard-head{display:flex;justify-content:space-b
 <div id="toast" class="toast"></div>
 
 <script src="app.js"></script>
+<script src="auth-email.js"></script>
 </body></html>
